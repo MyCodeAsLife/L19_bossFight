@@ -28,7 +28,6 @@ namespace L19_bossFight
             int countSpells = 3;
             int castSpell;
             int bossDamage = 200;
-            int stringLenght;
             int moveCount = 0;
             string userSpellName1 = "Рашамон";
             string userSpellName2 = "Хуганзакура";
@@ -44,8 +43,7 @@ namespace L19_bossFight
                 ++moveCount;
                 Console.WriteLine($"\nТекущий ход {moveCount}.");
                 healthBar = $"Здоровье игрока: {userCurrentHealth}\tЗдоровье босса: {bossHealth}";
-                stringLenght = healthBar.Length;
-                frame = new string(delimiter, stringLenght);
+                frame = new string(delimiter, healthBar.Length);
                 Console.WriteLine($"{frame}\n{healthBar}\n{frame}");
 
                 if (userCurrentHealth <= 0 || bossHealth <= 0)
