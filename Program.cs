@@ -114,6 +114,7 @@ namespace L19_bossFight
                 if (minionCurrentTimeLeave != 0)
                 {
                     --minionCurrentTimeLeave;
+
                     if (minionCurrentTimeLeave == 0)
                         Console.WriteLine("Время призыва миньона закончилось.");
                     else
