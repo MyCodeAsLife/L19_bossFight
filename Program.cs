@@ -67,6 +67,7 @@ namespace L19_bossFight
                     isOpen = false;
                     continue;
                 }
+
                 if (minionCurrentTimeLeave == 0 && (userMaxHealth * percentOfHealthToHeal) < userCurrentHealth)
                     castSpell = CommandSpell1;
                 else if (minionCurrentTimeLeave != 0 && (userMaxHealth * percentOfHealthToHeal) < userCurrentHealth)
@@ -80,6 +81,7 @@ namespace L19_bossFight
                     if (castSpell == CommandSpell2)
                         --castSpell;
                 }
+
                 switch (castSpell)
                 {
                     case CommandSpell1:
@@ -98,9 +100,9 @@ namespace L19_bossFight
                         userCurrentHealth = userMaxHealth < userCurrentHealth ? userMaxHealth : userCurrentHealth;
                         Console.WriteLine($"Вы использует заклинанние {userSpellName3}, вы исчезаете на 1 раунд " +
                                           $"и восстанавливаете {userHealSpell3} ед. здоровья.");
-
                         break;
                 }
+
                 if (!userImmunityToDamage)
                 {
                     userCurrentHealth -= bossDamage;
@@ -118,6 +120,7 @@ namespace L19_bossFight
                     else
                         Console.WriteLine($"Миньон исчезнет через {minionCurrentTimeLeave} ход(а).");
                 }
+
                 userImmunityToDamage = false;
             }
         }
