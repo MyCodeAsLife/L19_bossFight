@@ -113,6 +113,7 @@ namespace L19_bossFight
                         Console.WriteLine($"Миньон исчезнет через {minionCurrentTimeLeave} ход(а).");
                     }
                 }
+
                 isUserImmuneToDamage = false;
 
                 if (userCurrentHealth <= 0 || bossHealth <= 0)
@@ -120,6 +121,7 @@ namespace L19_bossFight
                     isOpen = false;
                 }
             }
+
             Console.WriteLine(frame);
 
             if (userCurrentHealth <= 0 && bossHealth <= 0)
