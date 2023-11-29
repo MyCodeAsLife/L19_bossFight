@@ -12,21 +12,22 @@ namespace L19_bossFight
     {
         static void Main(string[] args)
         {
-            const int CommandSpell1 = 0;
-            const int CommandSpell2 = 1;
-            const int CommandSpell3 = 2;
+            const int CommandSpellSummonMinion = 0;
+            const int CommandSpellAttackMinion = 1;
+            const int CommandSpellFault = 2;
 
             Random random = new Random();
             float userMaxHealth = 1000;
             float userCurrentHealth = userMaxHealth;
             float percentOfHealthToHeal = 0.8f;
             float bossHealth = 5000;
-            int userDamageSpell2 = 100;
-            int userHealSpell3 = 250;
+            float minHealthTreshold = userMaxHealth * percentOfHealthToHeal;
+            int damageSpellAttackMinion = 100;
+            int healSpellFault = 250;
             int minionMaxTimeLeave = 3;
             int minionCurrentTimeLeave = 0;
             int countSpells = 3;
-            int castSpell;
+            int currentCastSpell;
             int bossDamage = 200;
             int moveCount = 0;
             string userSpellName1 = "Рашамон";
@@ -35,7 +36,7 @@ namespace L19_bossFight
             string healthBar;
             string frame;
             char delimiter = '-';
-            bool userImmunityToDamage = false;
+            bool isTheUserImmuneToDamage = false;
             bool isOpen = true;
 
             while (isOpen)
@@ -68,48 +69,58 @@ namespace L19_bossFight
                     continue;
                 }
 
-                if (minionCurrentTimeLeave == 0 && (userMaxHealth * percentOfHealthToHeal) < userCurrentHealth)
-                    castSpell = CommandSpell1;
-                else if (minionCurrentTimeLeave != 0 && (userMaxHealth * percentOfHealthToHeal) < userCurrentHealth)
-                    castSpell = CommandSpell2;
-                else if (minionCurrentTimeLeave != 0 && (userMaxHealth * percentOfHealthToHeal) > userCurrentHealth)
-                    castSpell = random.Next(CommandSpell2, countSpells);
+                if (minionCurrentTimeLeave == 0 && minHealthTreshold < userCurrentHealth)
+                {
+                    currentCastSpell = CommandSpellSummonMinion;
+                }
+                else if (minionCurrentTimeLeave != 0 && minHealthTreshold < userCurrentHealth)
+                {
+                    currentCastSpell = CommandSpellAttackMinion;
+                }
+                else if (minionCurrentTimeLeave != 0 && minHealthTreshold > userCurrentHealth)
+                {
+                    currentCastSpell = random.Next(CommandSpellAttackMinion, countSpells);
+                }
                 else
                 {
-                    castSpell = random.Next(CommandSpell2, countSpells);
+                    currentCastSpell = random.Next(CommandSpellAttackMinion, countSpells);
 
-                    if (castSpell == CommandSpell2)
-                        --castSpell;
+                    if (currentCastSpell == CommandSpellAttackMinion)
+                    {
+                        --currentCastSpell;
+                    }
                 }
 
-                switch (castSpell)
+                switch (currentCastSpell)
                 {
-                    case CommandSpell1:
+                    case CommandSpellSummonMinion:
                         minionCurrentTimeLeave = minionMaxTimeLeave;
                         Console.WriteLine($"Вы использует заклинанние {userSpellName1}. Вы призвали миньона");
                         break;
 
-                    case CommandSpell2:
-                        bossHealth -= userDamageSpell2;
-                        Console.WriteLine($"Вы использует заклинанние {userSpellName2} и наносите по боссу {userDamageSpell2} ед. урона.");
+                    case CommandSpellAttackMinion:
+                        bossHealth -= damageSpellAttackMinion;
+                        Console.WriteLine($"Вы использует заклинанние {userSpellName2} и наносите по боссу {damageSpellAttackMinion} ед. урона.");
                         break;
 
-                    case CommandSpell3:
-                        userImmunityToDamage = true;
-                        userCurrentHealth += userHealSpell3;
+                    case CommandSpellFault:
+                        isTheUserImmuneToDamage = true;
+                        userCurrentHealth += healSpellFault;
                         userCurrentHealth = userMaxHealth < userCurrentHealth ? userMaxHealth : userCurrentHealth;
                         Console.WriteLine($"Вы использует заклинанние {userSpellName3}, вы исчезаете на 1 раунд " +
-                                          $"и восстанавливаете {userHealSpell3} ед. здоровья.");
+                                          $"и восстанавливаете {healSpellFault} ед. здоровья.");
                         break;
                 }
 
-                if (!userImmunityToDamage)
+                if (isTheUserImmuneToDamage == false)
                 {
                     userCurrentHealth -= bossDamage;
                     Console.WriteLine($"Босс наносит вам {bossDamage} ед. урона.");
                 }
                 else
+                {
                     Console.WriteLine("Босс неможет найти вс чтобы атаковать.");
+                }
 
                 if (minionCurrentTimeLeave != 0)
                 {
@@ -120,8 +131,7 @@ namespace L19_bossFight
                     else
                         Console.WriteLine($"Миньон исчезнет через {minionCurrentTimeLeave} ход(а).");
                 }
-
-                userImmunityToDamage = false;
+                isTheUserImmuneToDamage = false;
             }
         }
     }
