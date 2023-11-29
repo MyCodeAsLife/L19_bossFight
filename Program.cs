@@ -30,13 +30,13 @@ namespace L19_bossFight
             int currentCastSpell;
             int bossDamage = 200;
             int moveCount = 0;
-            string userSpellName1 = "Рашамон";
-            string userSpellName2 = "Хуганзакура";
-            string userSpellName3 = "Разлом";
+            string nameSpellSummonMinion = "Рашамон";
+            string nameSpellAttackMinion = "Хуганзакура";
+            string nameSpellFault = "Разлом";
             string healthBar;
-            string frame;
+            string frame = null;
             char delimiter = '-';
-            bool isTheUserImmuneToDamage = false;
+            bool isUserImmuneToDamage = false;
             bool isOpen = true;
 
             while (isOpen)
@@ -46,28 +46,6 @@ namespace L19_bossFight
                 healthBar = $"Здоровье игрока: {userCurrentHealth}\tЗдоровье босса: {bossHealth}";
                 frame = new string(delimiter, healthBar.Length);
                 Console.WriteLine($"{frame}\n{healthBar}\n{frame}");
-
-                if (userCurrentHealth <= 0 || bossHealth <= 0)
-                {
-                    if (userCurrentHealth <= 0 && bossHealth <= 0)
-                    {
-                        userCurrentHealth = 0;
-                        bossHealth = 0;
-                        Console.WriteLine("Ничья! Игрок и босс пали одновременно.");
-                    }
-                    else if (bossHealth <= 0)
-                    {
-                        bossHealth = 0;
-                        Console.WriteLine("Игрок победил!");
-                    }
-                    else
-                    {
-                        userCurrentHealth = 0;
-                        Console.WriteLine("Босс победил!");
-                    }
-                    isOpen = false;
-                    continue;
-                }
 
                 if (minionCurrentTimeLeave == 0 && minHealthTreshold < userCurrentHealth)
                 {
@@ -95,31 +73,31 @@ namespace L19_bossFight
                 {
                     case CommandSpellSummonMinion:
                         minionCurrentTimeLeave = minionMaxTimeLeave;
-                        Console.WriteLine($"Вы использует заклинанние {userSpellName1}. Вы призвали миньона");
+                        Console.WriteLine($"Вы использует заклинанние {nameSpellSummonMinion}. Вы призвали миньона");
                         break;
 
                     case CommandSpellAttackMinion:
                         bossHealth -= damageSpellAttackMinion;
-                        Console.WriteLine($"Вы использует заклинанние {userSpellName2} и наносите по боссу {damageSpellAttackMinion} ед. урона.");
+                        Console.WriteLine($"Вы использует заклинанние {nameSpellAttackMinion} и наносите по боссу {damageSpellAttackMinion} ед. урона.");
                         break;
 
                     case CommandSpellFault:
-                        isTheUserImmuneToDamage = true;
+                        isUserImmuneToDamage = true;
                         userCurrentHealth += healSpellFault;
                         userCurrentHealth = userMaxHealth < userCurrentHealth ? userMaxHealth : userCurrentHealth;
-                        Console.WriteLine($"Вы использует заклинанние {userSpellName3}, вы исчезаете на 1 раунд " +
+                        Console.WriteLine($"Вы использует заклинанние {nameSpellFault}, вы исчезаете на 1 раунд " +
                                           $"и восстанавливаете {healSpellFault} ед. здоровья.");
                         break;
                 }
 
-                if (isTheUserImmuneToDamage == false)
+                if (isUserImmuneToDamage == false)
                 {
                     userCurrentHealth -= bossDamage;
                     Console.WriteLine($"Босс наносит вам {bossDamage} ед. урона.");
                 }
                 else
                 {
-                    Console.WriteLine("Босс неможет найти вс чтобы атаковать.");
+                    Console.WriteLine("Босс неможет найти вас чтобы атаковать.");
                 }
 
                 if (minionCurrentTimeLeave != 0)
@@ -127,11 +105,34 @@ namespace L19_bossFight
                     --minionCurrentTimeLeave;
 
                     if (minionCurrentTimeLeave == 0)
+                    {
                         Console.WriteLine("Время призыва миньона закончилось.");
+                    }
                     else
+                    {
                         Console.WriteLine($"Миньон исчезнет через {minionCurrentTimeLeave} ход(а).");
+                    }
                 }
-                isTheUserImmuneToDamage = false;
+                isUserImmuneToDamage = false;
+
+                if (userCurrentHealth <= 0 || bossHealth <= 0)
+                {
+                    isOpen = false;
+                }
+            }
+            Console.WriteLine(frame);
+
+            if (userCurrentHealth <= 0 && bossHealth <= 0)
+            {
+                Console.WriteLine("Ничья! Игрок и босс пали одновременно.");
+            }
+            else if (bossHealth <= 0)
+            {
+                Console.WriteLine("Здоровья босса упало до 0.\nИгрок победил!");
+            }
+            else
+            {
+                Console.WriteLine("Здоровье игрока упало до 0.\nБосс победил!");
             }
         }
     }
